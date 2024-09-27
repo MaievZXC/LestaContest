@@ -8,6 +8,11 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Vector3 offset;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private Transform pivot;
+    [SerializeField] private bool invertY;
+
+    [Header ("Camera restrictions")]
+    [SerializeField] private float minAngle;
+    [SerializeField] private float maxAngle;
 
     // Start is called before the first frame update
     void Start()
@@ -29,8 +34,20 @@ public class CameraController : MonoBehaviour
         target.Rotate(0, horizontalRotation, 0);
 
         float verticalRotation = Input.GetAxis("Mouse Y") * rotationSpeed;
-        pivot.Rotate(-verticalRotation, 0, 0);
+        if (invertY)
+            pivot.Rotate(-verticalRotation, 0, 0);
+        else
+            pivot.Rotate(verticalRotation, 0, 0);
 
+        //Limit camera rotating
+        if (pivot.rotation.eulerAngles.x > maxAngle && pivot.rotation.eulerAngles.x < 180)
+        {
+            pivot.rotation = Quaternion.Euler(maxAngle, 0, 0);
+        }
+        else if(pivot.rotation.eulerAngles.x < 360 - minAngle && pivot.rotation.eulerAngles.x > 180)
+        {
+            pivot.rotation = Quaternion.Euler(360 - minAngle, 0, 0);
+        }
 
         float angleY = target.eulerAngles.y;
         float angleX = pivot.eulerAngles.x;
