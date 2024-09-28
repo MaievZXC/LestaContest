@@ -9,11 +9,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float gravityScale;
     private CharacterController characterController;
 
+    private Animator animator;
+
     private Vector3 movementDirection;
+    [SerializeField] private Transform pivot;
+    [SerializeField] private float rotationSpeed;
+    [SerializeField] private GameObject playerModel;
 
     // Start is called before the first frame update
     void Start()
     {
+        animator = playerModel.transform.GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
     }
 
@@ -24,9 +30,8 @@ public class PlayerController : MonoBehaviour
 
         float tempY = movementDirection.y;
 
-
-        movementDirection = transform.forward * Input.GetAxis("Vertical") + 
-            transform.right * Input.GetAxis("Horizontal");
+        movementDirection = pivot.transform.forward * Input.GetAxisRaw("Vertical") +
+            pivot.transform.right * Input.GetAxisRaw("Horizontal");
         movementDirection = movementDirection.normalized * moveSpeed;
 
         movementDirection.y = tempY;
@@ -39,6 +44,25 @@ public class PlayerController : MonoBehaviour
             movementDirection.y += Physics.gravity.y * gravityScale * Time.deltaTime;
         }
 
+
+        //animator logic
+        if (System.Math.Abs(movementDirection.x) + System.Math.Abs(movementDirection.z) > 0)
+        {
+            animator.SetBool("moving", true);
+            //Smooth player rotation towards camera direction
+            //transform.rotation = Quaternion.Euler(0, pivot.rotation.eulerAngles.y, 0);
+            transform.rotation = Quaternion.Slerp(transform.rotation, pivot.rotation, rotationSpeed * Time.deltaTime);
+            Quaternion newRotation = Quaternion.LookRotation(new Vector3(movementDirection.x, transform.position.y, movementDirection.z));
+            playerModel.transform.rotation = Quaternion.Slerp(playerModel.transform.rotation,
+                newRotation, rotationSpeed * Time.deltaTime);
+        }
+        else
+            animator.SetBool("moving", false);
+
+
+        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+        playerModel.transform.rotation = Quaternion.Euler(0, playerModel.transform.rotation.eulerAngles.y, 0);
         characterController.Move(movementDirection * Time.deltaTime);
+
     }
 }
