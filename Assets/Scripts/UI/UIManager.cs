@@ -13,6 +13,9 @@ public class UIManager : MonoBehaviour
     [Header ("Pause Menu")]
     [SerializeField] private GameObject pauseScreen;
 
+    [Header("Components to disable")]
+    [SerializeField] private Behaviour[] components;
+
     public void GameOver()
     {
         gameOverScreen.SetActive(true);
@@ -50,6 +53,11 @@ public class UIManager : MonoBehaviour
 
     public void PauseGame(bool status)
     {
+        foreach(var component in components)
+        {
+            component.enabled = !status;
+        }
+
         pauseScreen.SetActive(status);
 
         if (status)

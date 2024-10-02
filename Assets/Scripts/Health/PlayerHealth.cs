@@ -45,7 +45,7 @@ public class PlayerHealth : MonoBehaviour
         foreach (Behaviour component in components)
             component.enabled = true;
         AddHealth(maxHealth);
-        anim.ResetTrigger("die");
+        anim.ResetTrigger("death");
         anim.Play("Idle");
 
     }
@@ -108,6 +108,6 @@ public class PlayerHealth : MonoBehaviour
         //SoundManager.instance.PlaySound(deathSound);
         //gameObject.layer = LayerMask.NameToLayer("Dead");
         dead = true;
-        anim.SetTrigger("die");
+        anim.SetTrigger("death");
     }
 }
