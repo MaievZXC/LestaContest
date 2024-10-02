@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class ActivationPlatformScript : MonoBehaviour
 {
@@ -30,15 +31,14 @@ public class ActivationPlatformScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        print("ti loh");
         if (other.gameObject.tag == "Player" && flag)
-            StartCoroutine(Activation(activationTime));
+            StartCoroutine(Activation(activationTime, other));
     }
 
 
 
 
-    private IEnumerator Activation(float waitTime)
+    private IEnumerator Activation(float waitTime, Collider other)
     {
         flag = false;
         Color targetColor = new Color(200, 0, 0);
@@ -53,5 +53,23 @@ public class ActivationPlatformScript : MonoBehaviour
         }
         material.color = originalColor;
         flag = true;
+        if (IsWithinDamageArea(other.transform.position))
+        {
+            print("ti loh");
+            other.transform.GetComponent<PlayerHealth>().TakeDamage(1);
+        }
+    }
+
+    private bool IsWithinDamageArea(Vector3 target)
+    {
+        return target.x > transform.position.x - transform.lossyScale.x/ 2 &&
+            target.x < transform.position.x + transform.lossyScale.x / 2 &&
+            target.z > transform.position.z - transform.lossyScale.z / 2 &&
+            target.z < transform.position.z + transform.lossyScale.z / 2;
+    }
+
+    private void OnDrawGizmos()
+    {
+        //Gizmos.DrawSphere(trigger.center, 1);
     }
 }
