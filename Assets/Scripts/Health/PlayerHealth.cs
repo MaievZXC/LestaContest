@@ -15,6 +15,7 @@ public class PlayerHealth : MonoBehaviour
     public float currentHealth { get; private set; }
 
 
+
     protected Animator anim;
     private Transform model;
     protected bool dead;
@@ -37,6 +38,8 @@ public class PlayerHealth : MonoBehaviour
         dead = false;
         currentHealth = maxHealth;
         anim = model.GetComponent<Animator>();
+
+        
     }
 
     public void Respawn()
@@ -47,6 +50,7 @@ public class PlayerHealth : MonoBehaviour
         AddHealth(maxHealth);
         anim.ResetTrigger("death");
         anim.Play("Idle");
+
 
     }
 
@@ -109,5 +113,6 @@ public class PlayerHealth : MonoBehaviour
         //gameObject.layer = LayerMask.NameToLayer("Dead");
         dead = true;
         anim.SetTrigger("death");
+
     }
 }
