@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    //1 = pause, 2 = game over
+    private int whichScreen = 0;
+
     [Header ("Game over")]
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private AudioClip gameOverSound;
@@ -14,7 +17,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject pauseScreen;
 
     [Header("Components to disable")]
-    [SerializeField] private Behaviour[] components;
+    [SerializeField] private Behaviour[] pauseScreenComponents;
+    [SerializeField] private Behaviour[] gameOverScreenComponents;
 
     public void GameOver()
     {
@@ -53,7 +57,7 @@ public class UIManager : MonoBehaviour
 
     public void PauseGame(bool status)
     {
-        foreach(var component in components)
+        foreach(var component in pauseScreenComponents)
         {
             component.enabled = !status;
         }
