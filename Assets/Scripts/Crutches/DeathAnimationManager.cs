@@ -5,12 +5,12 @@ using UnityEngine;
 public class DeathAnimationManager : MonoBehaviour
 {
     UIManager uIManager;
-    [SerializeField] GameObject gameOverScreen;
     private void Start()
     {
         uIManager = FindObjectOfType<UIManager>();
     }
 
+    //legacy
     public void Respawn()
     {
         transform.parent.GetComponent<PlayerHealth>().Respawn();
@@ -19,6 +19,6 @@ public class DeathAnimationManager : MonoBehaviour
 
     public void RestartScreen()
     {
-        gameOverScreen.SetActive(true);
+        uIManager.GameOver(true);
     }
 }

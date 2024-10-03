@@ -6,8 +6,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    //1 = pause, 2 = game over
-    private int whichScreen = 0;
+    bool isDead = false;
 
     [Header ("Game over")]
     [SerializeField] private GameObject gameOverScreen;
@@ -19,11 +18,25 @@ public class UIManager : MonoBehaviour
     [Header("Components to disable")]
     [SerializeField] private Behaviour[] pauseScreenComponents;
     [SerializeField] private Behaviour[] gameOverScreenComponents;
+    [SerializeField] private PlayerHealth playerHealth;
 
-    public void GameOver()
+    public void GameOver(bool status)
     {
-        gameOverScreen.SetActive(true);
-        //SoundManager.instance.PlaySound(gameOverSound);
+        isDead = status;
+        foreach (var component in gameOverScreenComponents)
+        {
+            component.enabled = !status;
+        }
+
+        gameOverScreen.SetActive(status);
+
+        if (status)
+            Time.timeScale = 0;
+        else
+        {
+            Time.timeScale = 1;
+            playerHealth.Respawn();
+        }
     }
 
 
@@ -57,6 +70,8 @@ public class UIManager : MonoBehaviour
 
     public void PauseGame(bool status)
     {
+        if (isDead)
+            return;
         foreach(var component in pauseScreenComponents)
         {
             component.enabled = !status;
