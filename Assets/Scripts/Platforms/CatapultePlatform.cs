@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -9,18 +10,28 @@ public class CatapultePlatform : MonoBehaviour
     [SerializeField] private float activationTime;
     [SerializeField] private float cooldawn;
     [SerializeField] private float power;
+    [SerializeField] private float flightTime;
+    private float flightTimer;
+    private CharacterController characterController;
     private float currentPower;
     private Animator animator;
     private float currentCooldawn;
     private Material material;
     private BoxCollider trigger;
-    private bool inActivated;
-    
+    private bool isTriggered;
+    private bool isActivated;
+
+
 
 
     // Start is called before the first frame update
     void Start()
     {
+        isTriggered = false;
+        isActivated = false;
+        //QualitySettings.vSyncCount = 0;
+        //Application.targetFrameRate = 10;
+
         animator = GetComponent<Animator>();
         currentPower = power;
         currentCooldawn = 0;
@@ -30,16 +41,53 @@ public class CatapultePlatform : MonoBehaviour
         trigger.size = new Vector3(trigger.size.x, trigger.size.y + 1, trigger.size.z);
         //end of nightmare
 
+
+
         
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isActivated)
+        {
+            switch (transform.rotation.eulerAngles.y)
+            {
+                case 0:
+                    characterController.Move(new Vector3(currentPower * Time.deltaTime,
+                        currentPower * Time.deltaTime, 0));
+                    break;
+                case 90:
+                    characterController.Move(new Vector3(0,
+                        currentPower * Time.deltaTime, -currentPower * Time.deltaTime));
+                    break;
+                case 180:
+                    characterController.Move(new Vector3(-currentPower * Time.deltaTime,
+                        currentPower * Time.deltaTime, 0));
+                    break;
+                case 270:
+                    characterController.Move(new Vector3(0,
+                        currentPower * Time.deltaTime, currentPower * Time.deltaTime));
+                    break;
+
+            }
+            currentPower -= power * Time.deltaTime / flightTime;
+        }
+        else
+        {
+            currentPower = power;
+            flightTimer = flightTime;
+        }
+
+        if (flightTimer < 0)
+            isActivated = false;
+        else
+            flightTimer -= Time.deltaTime;
+
         currentCooldawn -= Time.deltaTime;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Player" && currentCooldawn < 0)
             StartCoroutine(Activation(activationTime, other));
@@ -50,29 +98,15 @@ public class CatapultePlatform : MonoBehaviour
 
     private IEnumerator Activation(float waitTime, Collider other)
     {
-        //animator.SetTrigger("activation");
-
+        animator.SetTrigger("activation");
+        characterController = other.GetComponent<CharacterController>();
 
         yield return new WaitForSeconds(waitTime);
         if (IsWithinDamageArea(other.transform.position))
         {
-            StartCoroutine(Flight(activationTime, other));
-
-
+            isActivated = true;
         }
         currentCooldawn = cooldawn;
-    }
-
-    private IEnumerator Flight(float time, Collider other)
-    {
-        CharacterController characterController = other.GetComponent<CharacterController>();
-        for (int i = 0; i < 500; i++)
-        {
-            characterController.Move(new Vector3(currentPower, currentPower, 0));
-            currentPower -= currentPower / 500 / 500;
-            yield return new WaitForSeconds(time / 500);
-        }
-        currentPower = power;
     }
 
 

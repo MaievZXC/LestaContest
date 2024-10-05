@@ -11,7 +11,6 @@ public class ActivationPlatformScript : MonoBehaviour
     [SerializeField] private float cooldawn;
     private Animator animator;
     private float currentCooldawn;
-    private Material material;
     private BoxCollider trigger;
 
 
@@ -26,8 +25,6 @@ public class ActivationPlatformScript : MonoBehaviour
         trigger = GetComponent<BoxCollider>();
         trigger.size = new Vector3(trigger.size.x, trigger.size.y + 1, trigger.size.z);
         //end of nightmare
-
-        material = GetComponent<MeshRenderer>().material;
     }
 
     // Update is called once per frame
@@ -36,8 +33,9 @@ public class ActivationPlatformScript : MonoBehaviour
         currentCooldawn -= Time.deltaTime;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
+        
         if (other.gameObject.tag == "Player" && currentCooldawn < 0)
             StartCoroutine(Activation(activationTime, other));
     }
@@ -49,14 +47,14 @@ public class ActivationPlatformScript : MonoBehaviour
     {
         animator.SetTrigger("activation");
 
+        currentCooldawn = cooldawn + activationTime;
+
 
         yield return new WaitForSeconds(waitTime);
         if (IsWithinDamageArea(other.transform.position))
         {
-            print("ti loh");
             other.transform.GetComponent<PlayerHealth>().TakeDamage(1);
         }
-        currentCooldawn = cooldawn;
     }
 
     private bool IsWithinDamageArea(Vector3 target)

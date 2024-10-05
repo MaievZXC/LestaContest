@@ -42,6 +42,12 @@ public class PlayerHealth : MonoBehaviour
         
     }
 
+    private void Update()
+    {
+        if (transform.position.y < 0 && !dead)
+            Death();
+    }
+
     public void Respawn()
     {
         dead = false;

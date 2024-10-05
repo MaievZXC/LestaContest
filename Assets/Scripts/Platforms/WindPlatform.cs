@@ -8,7 +8,6 @@ using static UnityEngine.GraphicsBuffer;
 public class WindPlatform : MonoBehaviour
 {
     [SerializeField] private float cooldawn;
-    [SerializeField] private Transform player;
     [SerializeField] private float windPower;
     private CharacterController controller;
     private Animator animator;
@@ -25,7 +24,6 @@ public class WindPlatform : MonoBehaviour
 
         currentCooldawn = cooldawn;
         direction = Random.Range(1, 4);
-        controller = player.GetComponent<CharacterController>();
 
 
     }
@@ -37,33 +35,48 @@ public class WindPlatform : MonoBehaviour
         {
             direction = Random.Range(1, 5);
             currentCooldawn = cooldawn;
-        }
-        currentCooldawn -= Time.deltaTime;
 
-        if (IsWithinWindArea(player.position))
-        {
-            print(direction);
             switch (direction)
             {
                 case 1:
-                    controller.Move(new Vector3(windPower * Time.deltaTime, 0, 0));
                     transform.rotation = Quaternion.Euler(0, 0, 0);
                     break;
                 case 2:
-                    controller.Move(new Vector3(0, 0, -windPower * Time.deltaTime));
                     transform.rotation = Quaternion.Euler(0, 90, 0);
                     break;
                 case 3:
-                    controller.Move(new Vector3(-windPower * Time.deltaTime, 0, 0));
                     transform.rotation = Quaternion.Euler(0, 180, 0);
                     break;
                 case 4:
-                    controller.Move(new Vector3(0, 0, windPower * Time.deltaTime));
                     transform.rotation = Quaternion.Euler(0, 270, 0);
                     break;
             }
         }
+
+
+        currentCooldawn -= Time.deltaTime;
         
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        controller = other.GetComponent<CharacterController>();
+
+        switch (direction)
+        {
+            case 1:
+                controller.Move(new Vector3(windPower * Time.deltaTime, 0, 0));
+                break;
+            case 2:
+                controller.Move(new Vector3(0, 0, -windPower * Time.deltaTime));
+                break;
+            case 3:
+                controller.Move(new Vector3(-windPower * Time.deltaTime, 0, 0));
+                break;
+            case 4:
+                controller.Move(new Vector3(0, 0, windPower * Time.deltaTime));
+                break;
+        }
     }
 
 
