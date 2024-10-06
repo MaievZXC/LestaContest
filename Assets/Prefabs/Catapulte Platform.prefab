@@ -181,8 +181,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activationTime: 2
   cooldawn: 5
-  power: 30
+  power: 25
   flightTime: 2
+  vertivality: 1
 --- !u!1 &4271873932323737436
 GameObject:
   m_ObjectHideFlags: 0

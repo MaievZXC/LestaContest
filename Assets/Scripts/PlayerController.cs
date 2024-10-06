@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        //animator logic
+        //model logic
         if (System.Math.Abs(movementDirection.x) + System.Math.Abs(movementDirection.z) > 0)
         {
             animator.SetBool("moving", true);
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, pivot.rotation, rotationSpeed * Time.deltaTime);
             Quaternion newRotation = Quaternion.LookRotation(new Vector3(movementDirection.x, transform.position.y, movementDirection.z));
             playerModel.transform.rotation = Quaternion.Slerp(playerModel.transform.rotation,
-                newRotation, rotationSpeed * Time.deltaTime);
+                newRotation, rotationSpeed * 3 * Time.deltaTime);
         }
         else
             animator.SetBool("moving", false);

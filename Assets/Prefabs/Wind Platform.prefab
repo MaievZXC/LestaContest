@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a85431c56e0b51f4bacdc15d88b7876b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldawn: 5
+  cooldawn: 2
   windPower: 2
 --- !u!1 &8740764839550492521
 GameObject:

@@ -11,6 +11,7 @@ public class CatapultePlatform : MonoBehaviour
     [SerializeField] private float cooldawn;
     [SerializeField] private float power;
     [SerializeField] private float flightTime;
+    [SerializeField] private float vertivality;
     private float flightTimer;
     private CharacterController characterController;
     private float currentPower;
@@ -55,19 +56,19 @@ public class CatapultePlatform : MonoBehaviour
             {
                 case 0:
                     characterController.Move(new Vector3(currentPower * Time.deltaTime,
-                        currentPower * Time.deltaTime, 0));
+                        currentPower * Time.deltaTime * vertivality, 0));
                     break;
                 case 90:
                     characterController.Move(new Vector3(0,
-                        currentPower * Time.deltaTime, -currentPower * Time.deltaTime));
+                        currentPower * Time.deltaTime * vertivality, -currentPower * Time.deltaTime));
                     break;
                 case 180:
                     characterController.Move(new Vector3(-currentPower * Time.deltaTime,
-                        currentPower * Time.deltaTime, 0));
+                        currentPower * Time.deltaTime * vertivality, 0));
                     break;
                 case 270:
                     characterController.Move(new Vector3(0,
-                        currentPower * Time.deltaTime, currentPower * Time.deltaTime));
+                        currentPower * Time.deltaTime * vertivality, currentPower * Time.deltaTime));
                     break;
 
             }

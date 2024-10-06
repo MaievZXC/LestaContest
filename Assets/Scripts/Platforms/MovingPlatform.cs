@@ -1,40 +1,42 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
-    [SerializeField] Vector3 startPoint;
-    [SerializeField] Vector3 endPoint;
-    [SerializeField] float time;
+    [SerializeField] private float distance;
+    [SerializeField] private float speed;
+    [SerializeField] private Vector3 direction;
 
-    bool status;
+    private BoxCollider trigger;
 
-    Vector3 velocity;
+    private Vector3 start;
 
     void Start()
     {
-        velocity = Vector3.zero;
-        status = false;
+        //stupidest thing i have ever done
+        trigger = GetComponent<BoxCollider>();
+        trigger.size = new Vector3(trigger.size.x, trigger.size.y + 1, trigger.size.z);
+        //end of nightmare
+        start = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (transform.position == startPoint)
-        {
-            status = false;
-        }else if (transform.position == endPoint)
-        {
-            status = true;
-        }
-        if (status)
-        {
-            Vector3.SmoothDamp(transform.position, endPoint, ref velocity, time);
-        }
-        else
-        {
-            Vector3.SmoothDamp(transform.position, startPoint, ref velocity, time);
-        }
+        transform.position = start + direction * (float) Math.Sin(Time.time * speed) * distance;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+            other.transform.parent = transform;
+               
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+            other.transform.parent = null;
     }
 }
