@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldawn: 2
-  windPower: 2
+  windPower: 3
 --- !u!1 &8740764839550492521
 GameObject:
   m_ObjectHideFlags: 0

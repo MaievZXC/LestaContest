@@ -20,6 +20,8 @@ public class PlayerHealth : MonoBehaviour
     private Transform model;
     protected bool dead;
 
+    [SerializeField] Transform start;
+
     [Header("iFrames")]
     [SerializeField] private float iFramesDuration;
     [SerializeField] private int numberOfFlashes;
@@ -50,6 +52,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void Respawn()
     {
+        transform.position = start.position;
         dead = false;
         foreach (Behaviour component in components)
             component.enabled = true;

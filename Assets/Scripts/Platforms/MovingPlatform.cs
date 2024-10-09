@@ -8,6 +8,7 @@ public class MovingPlatform : MonoBehaviour
     [SerializeField] private float distance;
     [SerializeField] private float speed;
     [SerializeField] private Vector3 direction;
+    [SerializeField] private float startPosition;
 
     private BoxCollider trigger;
 
@@ -25,7 +26,7 @@ public class MovingPlatform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = start + direction * (float) Math.Sin(Time.time * speed) * distance;
+        transform.position = start + direction * (float) Math.Sin((Time.time + startPosition) * speed) * distance;
     }
 
     private void OnTriggerEnter(Collider other)

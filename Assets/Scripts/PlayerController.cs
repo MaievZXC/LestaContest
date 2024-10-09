@@ -7,11 +7,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpHeight;
     [SerializeField] private float gravityScale;
+    [SerializeField] private float coyoteTime;
     private CharacterController characterController;
 
     private Animator animator;
 
     private Vector3 movementDirection;
+    private float coyoteTimer;
     [SerializeField] private Transform pivot;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private GameObject playerModel;
@@ -19,6 +21,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        coyoteTimer = coyoteTime;
         animator = playerModel.transform.GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
     }
@@ -35,14 +38,25 @@ public class PlayerController : MonoBehaviour
         movementDirection = movementDirection.normalized * moveSpeed;
 
         movementDirection.y = tempY;
-        
-        if (characterController.isGrounded && Input.GetButtonDown("Jump"))
-                movementDirection.y = jumpHeight;
+
+        if (characterController.isGrounded)
+            coyoteTimer = coyoteTime;
+
+        if (coyoteTimer > 0 && Input.GetButtonDown("Jump"))
+        {
+            coyoteTimer = 0;
+            movementDirection.y = jumpHeight;
+        }
 
         if (!characterController.isGrounded)
         {
+            coyoteTimer -= Time.deltaTime;
             movementDirection.y += Physics.gravity.y * gravityScale * Time.deltaTime;
         }
+
+        if (characterController.isGrounded && coyoteTimer > 0)
+            movementDirection.y = 0;
+
 
 
         //model logic

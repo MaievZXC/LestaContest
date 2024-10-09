@@ -100,6 +100,7 @@ public class CatapultePlatform : MonoBehaviour
     private IEnumerator Activation(float waitTime, Collider other)
     {
         animator.SetTrigger("activation");
+        currentCooldawn = cooldawn + activationTime;
         characterController = other.GetComponent<CharacterController>();
 
         yield return new WaitForSeconds(waitTime);
@@ -107,7 +108,6 @@ public class CatapultePlatform : MonoBehaviour
         {
             isActivated = true;
         }
-        currentCooldawn = cooldawn;
     }
 
 
