@@ -159,7 +159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activationTime: 1
   numberOfFlashes: 3
-  cooldawn: 3
+  cooldawn: 5
 --- !u!95 &2057306695089452926
 Animator:
   serializedVersion: 5

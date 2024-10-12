@@ -6,6 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class DisapeeringPlatform : MonoBehaviour
 {
+    public static List<DisapeeringPlatform> instance;
     [SerializeField] private float activationTime;
     private Animator animator;
     private BoxCollider trigger;
@@ -15,6 +16,8 @@ public class DisapeeringPlatform : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(instance == null)
+            instance = new List<DisapeeringPlatform>();
         isActivated = false;
         animator = GetComponent<Animator>();
         //stupidest thing i have ever done
@@ -41,6 +44,7 @@ public class DisapeeringPlatform : MonoBehaviour
 
 
         yield return new WaitForSeconds(waitTime);
+        instance.Add(this);
         gameObject.SetActive(false);
     }
 }

@@ -22,17 +22,17 @@ public class VolumeSlider : MonoBehaviour
         switch (sourseName)
         {
             case SourceType.Music:
-                slider.SetValueWithoutNotify(PlayerPrefs.GetFloat("musicVolume", 1) * slider.maxValue);
+                slider.SetValueWithoutNotify(PlayerPrefs.GetFloat("musicVolume", 0.5f) * slider.maxValue);
                 slider.onValueChanged.AddListener((v) =>
                 {
-                    //SoundManager.instance.ChangeMusicVolume(slider.value / slider.maxValue);
+                    SoundManager.instance.ChangeMusicVolume(slider.value / slider.maxValue);
                 });
                 break;
             case SourceType.Volume:
-                slider.SetValueWithoutNotify(PlayerPrefs.GetFloat("soundVolume", 1) * slider.maxValue);
+                slider.SetValueWithoutNotify(PlayerPrefs.GetFloat("soundVolume", 0.5f) * slider.maxValue);
                 slider.onValueChanged.AddListener((v) =>
                 {
-                    //SoundManager.instance.ChangeSoundVolume(slider.value / slider.maxValue);
+                    SoundManager.instance.ChangeSoundVolume(slider.value / slider.maxValue);
                 });
                 break;
 

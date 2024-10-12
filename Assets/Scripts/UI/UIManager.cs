@@ -38,9 +38,13 @@ public class UIManager : MonoBehaviour
         gameOverScreen.SetActive(status);
 
         if (status)
+        {
+            Cursor.lockState = CursorLockMode.Confined;
             Time.timeScale = 0;
+        }
         else
         {
+            Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1;
             playerHealth.Respawn();
         }
@@ -72,6 +76,12 @@ public class UIManager : MonoBehaviour
         }
         FindObjectOfType<PlayerController>().transform.position = start.position;
         startTime = Time.time;
+        foreach(var platform in DisapeeringPlatform.instance)
+        {
+            platform.gameObject.SetActive(true);
+        }
+        DisapeeringPlatform.instance.Clear();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
 
@@ -87,9 +97,15 @@ public class UIManager : MonoBehaviour
         pauseScreen.SetActive(status);
 
         if (status)
+        {
             Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.Confined;
+        }
         else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1;
+        }
     }
 
     public void GameComplete()
@@ -101,8 +117,8 @@ public class UIManager : MonoBehaviour
         }
 
 
-        int minutes = Mathf.FloorToInt(Time.time - startTime / 60);
-        int seconds = Mathf.FloorToInt(Time.time - startTime % 60);
+        int minutes = Mathf.FloorToInt((Time.time - startTime) / 60);
+        int seconds = Mathf.FloorToInt((Time.time - startTime) % 60);
         currentTime.text = string.Format("{0:00}:{1:00}", minutes, seconds);
 
         float record;
@@ -119,6 +135,7 @@ public class UIManager : MonoBehaviour
         bestTime.text = string.Format("{0:00}:{1:00}", minutes, seconds);
 
         gameCompleteScreen.SetActive(true);
+        Cursor.lockState = CursorLockMode.Confined;
         Time.timeScale = 0;
     }
 

@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEditor.UIElements;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
@@ -72,7 +66,7 @@ public class PlayerHealth : MonoBehaviour
 
             if (currentHealth > 0)
             {
-                //SoundManager.instance.PlaySound(hitSound);
+                SoundManager.instance.PlaySound(hitSound);
                 anim.SetTrigger("hurt");
                 StartCoroutine(Invunerability());
             }
@@ -118,7 +112,7 @@ public class PlayerHealth : MonoBehaviour
     {
         foreach (Behaviour component in components)
             component.enabled = false;
-        //SoundManager.instance.PlaySound(deathSound);
+        SoundManager.instance.PlaySound(deathSound);
         //gameObject.layer = LayerMask.NameToLayer("Dead");
         dead = true;
         anim.SetTrigger("death");
